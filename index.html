@@ -248,6 +248,235 @@
       }
     }
   </style>
+  <style>
+    .site-footer {
+      background: linear-gradient(180deg, #eff6ff 0%, #e0edff 100%);
+      color: #334155;
+      margin-top: 64px;
+      padding: 44px 20px 22px;
+    }
+
+    .site-footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .site-footer-brand {
+      margin: 0 0 10px;
+      color: #0f172a;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .site-footer-text {
+      margin: 0;
+      color: #475569;
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .site-footer-title {
+      margin: 0 0 12px;
+      color: #0f172a;
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .site-footer-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .site-footer-link {
+      color: #334155;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .site-footer-link:hover {
+      color: #2563eb;
+    }
+
+    .site-footer-bottom {
+      max-width: 1120px;
+      margin: 24px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid rgba(148, 163, 184, 0.35);
+      color: #64748b;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    /* Acentos azul pastel (variable --evergreen en medvi-ready.css = #6fa6d4) */
+    .text-pastel-blue {
+      color: var(--evergreen);
+      font-weight: 700;
+    }
+
+    .primary-cta.pastel-cta {
+      background-color: var(--evergreen);
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .featured-products-grid.featured-products-grid--three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: start;
+    }
+
+    /* El recuadro crece con la proporción natural de cada imagen (ancho de columna, alto automático) */
+    .featured-products-section .featured-product-image {
+      display: block;
+      height: auto;
+      min-height: 0;
+      align-items: unset;
+      justify-content: unset;
+    }
+
+    .featured-products-section .featured-product-img.photo {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+    }
+
+    @media screen and (max-width: 991px) {
+      .featured-products-grid.featured-products-grid--three {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media screen and (max-width: 767px) {
+      .featured-products-grid.featured-products-grid--three {
+        grid-template-columns: repeat(3, minmax(260px, 1fr));
+      }
+    }
+
+    /* Botón flotante WhatsApp (marca oficial: #25D366); CTA solo al pasar el mouse o al interactuar */
+    .whatsapp-float {
+      position: fixed;
+      right: 20px;
+      bottom: 22px;
+      z-index: 10000;
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      padding: 14px;
+      border-radius: 999px;
+      background: #25d366;
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-decoration: none;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.22);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, gap 0.22s ease, padding 0.22s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .whatsapp-float:hover {
+        gap: 11px;
+        padding: 14px 20px 14px 16px;
+        background: #20bd5a;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.26);
+      }
+    }
+
+    .whatsapp-float:focus-visible {
+      outline: 3px solid #fff;
+      outline-offset: 3px;
+      gap: 11px;
+      padding: 14px 20px 14px 16px;
+    }
+
+    .whatsapp-float.is-open {
+      gap: 11px;
+      padding: 14px 20px 14px 16px;
+    }
+
+    .whatsapp-float__icon {
+      flex-shrink: 0;
+      display: flex;
+      width: 36px;
+      height: 36px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .whatsapp-float__icon svg {
+      display: block;
+      width: 23px;
+      height: 23px;
+    }
+
+    .whatsapp-float__cta {
+      display: block;
+      max-width: 0;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s ease, max-width 0.28s ease, margin 0.28s ease;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .whatsapp-float:hover .whatsapp-float__cta {
+        opacity: 1;
+        max-width: min(260px, 72vw);
+        margin-left: 2px;
+      }
+    }
+
+    .whatsapp-float:focus-visible .whatsapp-float__cta,
+    .whatsapp-float.is-open .whatsapp-float__cta {
+      opacity: 1;
+      max-width: min(260px, 72vw);
+      margin-left: 2px;
+    }
+
+    @media (max-width: 479px) {
+      .whatsapp-float {
+        right: 14px;
+        bottom: 16px;
+        font-size: 15px;
+      }
+
+      .whatsapp-float.is-open,
+      .whatsapp-float:focus-visible {
+        padding: 13px 16px 13px 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .whatsapp-float {
+        transition: none;
+      }
+
+      .whatsapp-float__cta {
+        transition: none;
+      }
+
+      @media (hover: hover) and (pointer: fine) {
+        .whatsapp-float:hover {
+          transform: none;
+        }
+      }
+    }
+  </style>
 
 
   <script src="../ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"
@@ -300,6 +529,52 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
 </head>
 
 <body class="body">
+  <!-- WhatsApp: sustituye 573001234567 por tu número internacional sin + ni espacios (ej. Colombia: 57 + celular). -->
+  <a class="whatsapp-float" id="whatsapp-float"
+    href="https://wa.me/573001234567?text=Hola%2C%20quiero%20informaci%C3%B3n%20sobre%20Medilink%20Colombia."
+    target="_blank" rel="noopener noreferrer"
+    aria-label="Chatear por WhatsApp con Medilink Colombia">
+    <span class="whatsapp-float__icon" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="currentColor"
+          d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+      </svg>
+    </span>
+    <span class="whatsapp-float__cta" aria-hidden="true">¿Tienes dudas? Escríbenos</span>
+  </a>
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      var link = document.getElementById('whatsapp-float');
+      if (!link) return;
+      var tapToReveal = window.matchMedia('(hover: none)').matches;
+      if (!tapToReveal) return;
+
+      link.setAttribute('aria-expanded', 'false');
+
+      link.addEventListener('click', function (e) {
+        if (!link.classList.contains('is-open')) {
+          e.preventDefault();
+          link.classList.add('is-open');
+          link.setAttribute('aria-expanded', 'true');
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!link.classList.contains('is-open')) return;
+        if (!link.contains(e.target)) {
+          link.classList.remove('is-open');
+          link.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && link.classList.contains('is-open')) {
+          link.classList.remove('is-open');
+          link.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
   <div
     style="-webkit-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
     class="w-layout-blockcontainer hero---navigation fixed w-container">
@@ -321,7 +596,7 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
 
   <div class="main-page-wrapper">
     <div data-w-id="39198298-98d3-7ca4-293e-1e90ed08feee" class="announcements" style="display:block;">
-      <div class="top-bar-text"><span class="evergreen">Consulta gratis</span> con tu compra<br></div>
+      <div class="top-bar-text"><span class="text-pastel-blue">Consulta gratis</span> con tu compra<br></div>
     </div>
     <section id="hero" data-w-id="706a5c6f-e030-079d-a39b-d302d49c06b4" class="section---hero">
       <div data-w-id="68625416-fd88-ff71-10df-f23f9bbea1c2"
@@ -337,7 +612,7 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
       <div data-w-id="2b5f5bb8-4e72-75d4-3f93-c322b69f4445" class="w-layout-blockcontainer hero---content w-container">
         <div class="hero-block">
           <div class="hero-preheader">Únete a más de <span class="text-span">100,000</span> pacientes de Medilink Colombia</div>
-          <h1 class="heading">¿Por fin te tomas en serio bajar de peso? Nosotros también. Pérdida de grasa <span class="evergreen">fácil</span> con atención personalizada y medicación</h1>
+          <h1 class="heading">¿Por fin te tomas en serio bajar de peso? Nosotros también. Pérdida de grasa <span class="text-pastel-blue">fácil</span> con atención personalizada y medicación</h1>
           <div class="w-layout-grid list-grid hero-checklist">
             <div id="w-node-_0e395121-33fa-02bc-dd6f-d50a531e6895-bfc40424" class="list-item-container"><img
                 alt="Pierde peso rápido" src="images/checkmark-icon-white.svg" class="image checkmark">
@@ -354,7 +629,7 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
             </div>
             <div id="w-node-ba0cb621-9a7e-b50c-5ff2-cb11cc2fb6ab-bfc40424" class="list-item-container"><img
                 alt="Empieza hoy" src="images/checkmark-icon-white.svg" class="image checkmark">
-              <div class="list-item-text"><span class="semi-bold">Empieza por solo $179</span>, sin seguro médico +
+              <div class="list-item-text"><span class="semi-bold">Empieza hoy mismo</span>, 
                 envío gratis</div>
             </div>
             <div id="w-node-ba0cb621-9a7e-b50c-5ff2-cb11cc2fb6ab-bfc40424" class="list-item-container"><img
@@ -362,7 +637,7 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
               <div class="list-item-text">¡Aprobado para HSA/FSA!</div>
             </div>
           </div>
-          <a href="intakeform6089.html?afid=org" class="primary-cta green w-button">¿Califico?</a>
+          <a href="intakeform6089.html?afid=org" class="primary-cta pastel-cta w-button">¿Califico?</a>
         </div>
       </div>
       <div class="w-layout-blockcontainer hero---photo-grid w-container">
@@ -411,49 +686,70 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
       </div>
     </section>
     <div>
-      <p style="text-align:center;" class="section-paragraph">Con orgullo, destacados y anunciados en</p>
+      <p style="text-align:center;" class="section-paragraph">¿Listo para empezar a cambiar tu cuerpo y tu salud?</p>
     </div>
     <section class="featured-products-section">
       <div class="featured-products-head">
-        <h2 class="featured-products-title">Historias reales, <span class="evergreen">resultados visibles</span></h2>
+        <h2 class="featured-products-title">Historias reales, <span class="text-pastel-blue">resultados visibles</span></h2>
         <p class="featured-products-copy">Conoce casos de pacientes que lograron bajar de peso con tratamiento médico y
           acompañamiento profesional, sin depender de rutinas de ejercicio intensas.</p>
       </div>
-      <div class="featured-products-grid">
+      <div class="featured-products-grid featured-products-grid--three">
         <article class="featured-product-card">
-          <div class="featured-product-image mint"><img src="images/hero-grid-9.jpg" alt="Paciente con resultados en pérdida de peso"
+          <div class="featured-product-image sky"><img src="images/1.jpeg"
+              alt="Mujer mostrando pantalón demasiado ancho tras reducción de talla"
               class="featured-product-img photo"></div>
-          <p class="featured-product-price">Tratamiento confiable</p>
-          <h3 class="featured-product-name">Resultados visibles</h3>
-          <p class="featured-product-note">Pacientes que reportan progreso durante las primeras semanas del tratamiento.</p>
+          <p class="featured-product-price">Cambio visible</p>
+          <h3 class="featured-product-name">Menos centímetros</h3>
+          <p class="featured-product-note">La ropa que antes te quedaba justa puede evidenciar un avance real cuando el plan se sigue con constancia.</p>
           <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
         </article>
         <article class="featured-product-card">
-          <div class="featured-product-image stone"><img src="images/hero-grid-4.jpg" alt="Paciente con cambio físico"
+          <div class="featured-product-image stone"><img src="images/2.jpeg"
+              alt="Mujer sonriente sosteniendo un jean holgado que evidencia pérdida de peso"
               class="featured-product-img photo"></div>
-          <p class="featured-product-price">Acompañamiento médico</p>
-          <h3 class="featured-product-name">Plan personalizado</h3>
-          <p class="featured-product-note">Supervisión profesional y seguimiento continuo para maximizar resultados.</p>
+          <p class="featured-product-price">Bienestar</p>
+          <h3 class="featured-product-name">Meta alcanzada</h3>
+          <p class="featured-product-note">Un acompañamiento médico puede ayudarte a sentirte mejor contigo mismo y con tu día a día.</p>
           <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
         </article>
         <article class="featured-product-card">
-          <div class="featured-product-image sky"><img src="images/hero-grid-3.jpg" alt="Paciente satisfecho con su avance"
+          <div class="featured-product-image ice"><img src="images/3.jpeg"
+              alt="Hombre sentado frente a una báscula, momento de reflexión sobre su peso"
               class="featured-product-img photo"></div>
-          <p class="featured-product-price">Sin complicaciones</p>
-          <h3 class="featured-product-name">Proceso simple</h3>
-          <p class="featured-product-note">Una ruta clara para perder peso con apoyo clínico y medicación indicada.</p>
-          <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
-        </article>
-        <article class="featured-product-card">
-          <div class="featured-product-image ice"><img src="images/hero-grid-8.jpg" alt="Paciente con transformación física"
-              class="featured-product-img photo"></div>
-          <p class="featured-product-price">Cambio sostenible</p>
-          <h3 class="featured-product-name">Transformación real</h3>
-          <p class="featured-product-note">Resultados que se mantienen con adherencia al tratamiento y seguimiento adecuado.</p>
+          <p class="featured-product-price">Tu punto de partida</p>
+          <h3 class="featured-product-name">El primer paso</h3>
+          <p class="featured-product-note">Reconocer dónde estás hoy es el inicio de un camino con apoyo clínico y un plan hecho para ti.</p>
           <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
         </article>
       </div>
     </section>
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div>
+          <h3 class="site-footer-brand">Medilink Colombia</h3>
+          <p class="site-footer-text">
+            Soluciones personalizadas para bajar de peso con acompañamiento médico profesional y seguimiento continuo.
+          </p>
+        </div>
+        <div>
+          <h4 class="site-footer-title">Información legal</h4>
+          <ul class="site-footer-links">
+            <li><a class="site-footer-link" href="#">Políticas de privacidad</a></li>
+            <li><a class="site-footer-link" href="#">Términos y condiciones</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="site-footer-title">Contacto</h4>
+          <ul class="site-footer-links">
+            <li><a class="site-footer-link" href="mailto:contacto@medilinkcolombia.com">contacto@medilinkcolombia.com</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-footer-bottom">
+        © 2026 Medilink Colombia. Todos los derechos reservados.
+      </div>
+    </footer>
   </div>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
