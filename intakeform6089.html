@@ -930,6 +930,74 @@
       color: var(--pick-active);
     }
 
+    .intake-wizard {
+      margin-bottom: 4px;
+    }
+
+    .intake-wizard__progress {
+      margin: 0 0 18px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #64748b;
+    }
+
+    .intake-step__title {
+      margin: 0 0 10px;
+      font-family: Lora, Georgia, "Times New Roman", serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .intake-wizard-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin: 20px 0 8px;
+      padding: 0 2px;
+    }
+
+    .intake-wizard-btn {
+      flex: 1;
+      max-width: 200px;
+      padding: 12px 18px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .intake-wizard-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .intake-wizard-btn--ghost {
+      color: var(--accent-dark);
+      background: #fff;
+      border: 2px solid rgba(111, 166, 212, 0.55);
+    }
+
+    .intake-wizard-btn--ghost:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(111, 166, 212, 0.08);
+    }
+
+    .intake-wizard-btn--primary {
+      margin-left: auto;
+      color: #fff;
+      background: var(--accent);
+      border: 2px solid transparent;
+    }
+
+    .intake-wizard-btn--primary:hover:not(:disabled) {
+      background: var(--accent-dark);
+    }
+
     .intake-actions {
       margin-top: 24px;
     }
@@ -1282,9 +1350,12 @@
 
       <header class="intake-form__head">
         <h2>Tu evaluación médica</h2>
-        <p>Responda con precisión. Las preguntas clínicas están agrupadas en <strong>secciones desplegables</strong> para que el formulario no se sienta abrumador. Al final obtendrá un <strong>puntaje</strong> y una orientación sobre idoneidad.</p>
+        <p>Avance con <strong>Siguiente</strong> paso a paso. Al terminar verá si es <strong>apto</strong> y su <strong>porcentaje de aceptación</strong> estimado; el análisis no se muestra en cada pregunta.</p>
       </header>
 
+      <div class="intake-wizard" id="intake-wizard">
+        <p class="intake-wizard__progress" id="wizard-progress" aria-live="polite">Paso 1 de 7</p>
+        <div class="intake-step is-active" data-wizard-step="0">
       <fieldset>
         <legend class="intake-legend-plain">Medidas y perfil</legend>
         <div class="intake-row intake-row--thirds">
@@ -1387,13 +1458,13 @@
           </div>
         </div>
       </fieldset>
+        </div>
 
-      <p class="intake-field-hint intake-field-hint--score-intro">Las siguientes secciones calculan un <strong>puntaje de idoneidad</strong> (0% a 100%). Responda con sinceridad; si alguna contraindicación absoluta aplica, el resultado será <strong>0%</strong>.</p>
+        <div class="intake-step" data-wizard-step="1" hidden>
+      <p class="intake-field-hint intake-field-hint--score-intro">Las siguientes pantallas forman parte del mismo análisis; el resultado se muestra solo al final.</p>
 
-      <details class="intake-accordion" open>
-        <summary class="intake-accordion__summary">Datos generales <span class="intake-accordion__badge">No restan puntos</span></summary>
-        <div class="intake-accordion__body">
-          <p class="intake-field-hint">Nombre, medidas y hábitos declarados no modifican el puntaje; sirven para contextualizar su caso.</p>
+          <h3 class="intake-step__title">Datos generales</h3>
+          <p class="intake-field-hint">Nombre, perímetros y hábitos sirven para contextualizar su caso.</p>
           <div class="intake-row">
             <div class="intake-field-box">
               <label class="intake-label" for="nombre_participante">Nombre <span class="intake-hint">(opcional)</span></label>
@@ -1445,13 +1516,12 @@
               <textarea class="intake-textarea" id="objetivo_tratamiento" name="objetivo_tratamiento" maxlength="2000" placeholder="Ej. Perder peso de forma sostenible, mejorar cifras de glucosa…"></textarea>
             </div>
           </div>
-        </div>
-      </details>
 
-      <details class="intake-accordion intake-accordion--abs">
-        <summary class="intake-accordion__summary">Contraindicaciones absolutas <span class="intake-accordion__badge intake-accordion__badge--danger">−100% c/u</span></summary>
-        <div class="intake-accordion__body">
-          <p class="intake-field-hint">Si responde <strong>Sí</strong> a <strong>cualquiera</strong>, el puntaje final será <strong>0%</strong> (contraindicado).</p>
+        </div>
+
+        <div class="intake-step" data-wizard-step="2" hidden>
+        <h3 class="intake-step__title">Contraindicaciones absolutas</h3>
+          <p class="intake-field-hint">Si responde <strong>Sí</strong> a <strong>cualquiera</strong>, el sistema lo marcará como <strong>no apto</strong> de forma automática.</p>
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a1">¿Tiene o tuvo cáncer de tiroides (carcinoma medular)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a1"><label class="intake-gender-card"><input type="radio" name="s_ca_medular" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_ca_medular" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a2">¿Familiar de primer grado con cáncer medular de tiroides? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a2"><label class="intake-gender-card"><input type="radio" name="s_fam_ca_medular" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_fam_ca_medular" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a3">¿Le diagnosticaron neoplasia endocrina múltiple tipo 2 (MEN 2)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a3"><label class="intake-gender-card"><input type="radio" name="s_men2" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_men2" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
@@ -1461,53 +1531,51 @@
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a7">¿Está en período de lactancia? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a7"><label class="intake-gender-card"><input type="radio" name="s_lactancia" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_lactancia" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a8">¿Ha tenido reacción alérgica a tirzepatida (Mounjaro/Zepbound)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a8"><label class="intake-gender-card"><input type="radio" name="s_alergia_tirzepatida" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alergia_tirzepatida" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
           <div class="intake-score-yn"><p class="intake-pill-question" id="s-a9">¿Ha tenido alergia grave a semaglutida (Ozempic/Wegovy)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-a9"><label class="intake-gender-card"><input type="radio" name="s_alergia_semaglutida" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alergia_semaglutida" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-        </div>
-      </details>
 
-      <details class="intake-accordion intake-accordion--high">
-        <summary class="intake-accordion__summary">Riesgo alto <span class="intake-accordion__badge intake-accordion__badge--warn">−40% a −60%</span></summary>
-        <div class="intake-accordion__body">
-          <p class="intake-field-hint">«Sí» resta el porcentaje indicado por pregunta (se acumulan).</p>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h1">¿Tiene enfermedad renal crónica grave o insuficiencia renal terminal? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−50%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h1"><label class="intake-gender-card"><input type="radio" name="s_renal_grave" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_renal_grave" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h2">¿Tiene retinopatía diabética proliferativa o edema macular? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−45%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h2"><label class="intake-gender-card"><input type="radio" name="s_retina_prolif" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_retina_prolif" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h3">¿Tiene insuficiencia cardíaca o arritmias graves? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−45%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h3"><label class="intake-gender-card"><input type="radio" name="s_ic_arritmias" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_ic_arritmias" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h4">¿Tiene enfermedad hepática grave (cirrosis)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−40%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h4"><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_grave" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_grave" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h5">¿Es alérgico/a a excipientes del medicamento (fosfatos, hidróxido de sodio)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−50%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h5"><label class="intake-gender-card"><input type="radio" name="s_alergia_excipientes" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alergia_excipientes" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h6">¿Tiene gastroparesia o vaciamiento gástrico severamente lento? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−40%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h6"><label class="intake-gender-card"><input type="radio" name="s_gastroparesia" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_gastroparesia" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
         </div>
-      </details>
 
-      <details class="intake-accordion intake-accordion--mod">
-        <summary class="intake-accordion__summary">Riesgo moderado <span class="intake-accordion__badge intake-accordion__badge--mod">−15% a −30%</span></summary>
-        <div class="intake-accordion__body">
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m1">¿Tiene hipotiroidismo o hipertiroidismo? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−20%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m1"><label class="intake-gender-card"><input type="radio" name="s_hipo_hipertiroidismo" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hipo_hipertiroidismo" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m2">¿Tiene enfermedad hepática leve o moderada (hígado graso)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−15%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m2"><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_leve" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_leve" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m3">¿Tiene hipertensión arterial no controlada? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−20%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m3"><label class="intake-gender-card"><input type="radio" name="s_hta_no_controlada" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hta_no_controlada" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m4">¿Tiene retinopatía diabética no proliferativa? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−20%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m4"><label class="intake-gender-card"><input type="radio" name="s_retina_no_prolif" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_retina_no_prolif" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m5">¿Toma insulina actualmente? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−25%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m5"><label class="intake-gender-card"><input type="radio" name="s_insulina_actual" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_insulina_actual" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m6">¿Toma sulfonilureas (glibenclamida u otros)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−20%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m6"><label class="intake-gender-card"><input type="radio" name="s_sulfonilureas" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_sulfonilureas" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m7">¿Toma anticoagulantes (warfarina, rivaroxabán)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−15%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m7"><label class="intake-gender-card"><input type="radio" name="s_anticoagulantes" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_anticoagulantes" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m8">¿Ha tenido episodios de hipoglucemia frecuentes? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−20%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m8"><label class="intake-gender-card"><input type="radio" name="s_hipoglucemias" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hipoglucemias" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m9">¿Tiene apnea del sueño severa no tratada? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−15%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m9"><label class="intake-gender-card"><input type="radio" name="s_apnea_severa" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_apnea_severa" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m10">¿Tiene antecedente de pancreatitis leve o única? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−30%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m10"><label class="intake-gender-card"><input type="radio" name="s_pancreatitis_leve" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_pancreatitis_leve" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m11">¿Tiene enfermedad renal crónica leve o moderada? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−25%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m11"><label class="intake-gender-card"><input type="radio" name="s_renal_leve_mod" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_renal_leve_mod" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+        <div class="intake-step" data-wizard-step="3" hidden>
+        <h3 class="intake-step__title">Riesgo alto</h3>
+          <p class="intake-field-hint">Marque «Sí» solo si la situación le aplica.</p>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h1">¿Tiene enfermedad renal crónica grave o insuficiencia renal terminal? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h1"><label class="intake-gender-card"><input type="radio" name="s_renal_grave" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_renal_grave" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h2">¿Tiene retinopatía diabética proliferativa o edema macular? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h2"><label class="intake-gender-card"><input type="radio" name="s_retina_prolif" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_retina_prolif" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h3">¿Tiene insuficiencia cardíaca o arritmias graves? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h3"><label class="intake-gender-card"><input type="radio" name="s_ic_arritmias" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_ic_arritmias" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h4">¿Tiene enfermedad hepática grave (cirrosis)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h4"><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_grave" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_grave" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h5">¿Es alérgico/a a excipientes del medicamento (fosfatos, hidróxido de sodio)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h5"><label class="intake-gender-card"><input type="radio" name="s_alergia_excipientes" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alergia_excipientes" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-h6">¿Tiene gastroparesia o vaciamiento gástrico severamente lento? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-h6"><label class="intake-gender-card"><input type="radio" name="s_gastroparesia" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_gastroparesia" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+
         </div>
-      </details>
 
-      <details class="intake-accordion intake-accordion--low">
-        <summary class="intake-accordion__summary">Riesgo leve <span class="intake-accordion__badge intake-accordion__badge--low">−5% a −10%</span></summary>
-        <div class="intake-accordion__body">
-          <p class="intake-field-hint">Si tiene <strong>75 años o más</strong> según su fecha de nacimiento, se restan automáticamente <strong>10 puntos</strong> del 100% inicial (según tabla).</p>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l1">¿Tiene depresión o ansiedad actualmente? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−10%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l1"><label class="intake-gender-card"><input type="radio" name="s_depresion_ansiedad" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_depresion_ansiedad" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l2">¿Tiene trastorno de conducta alimentaria (anorexia/bulimia)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−10%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l2"><label class="intake-gender-card"><input type="radio" name="s_tca" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_tca" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l3">¿Usa anticonceptivos hormonales? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−5%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l3"><label class="intake-gender-card"><input type="radio" name="s_anticonceptivos" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_anticonceptivos" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l4">¿Fuma o consume tabaco? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−5%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l4"><label class="intake-gender-card"><input type="radio" name="s_tabaco" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_tabaco" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l5">¿Consume alcohol regularmente? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−10%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l5"><label class="intake-gender-card"><input type="radio" name="s_alcohol_regular" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alcohol_regular" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l6">¿Tiene síndrome de ovario poliquístico (SOP)? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−5%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l6"><label class="intake-gender-card"><input type="radio" name="s_sop" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_sop" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
-          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l7">¿Tiene corticosteroides de uso crónico? <span class="req" aria-hidden="true">*</span> <span class="intake-yn-penalty">−10%</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l7"><label class="intake-gender-card"><input type="radio" name="s_corticosteroides" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_corticosteroides" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+        <div class="intake-step" data-wizard-step="4" hidden>
+        <h3 class="intake-step__title">Riesgo moderado</h3>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m1">¿Tiene hipotiroidismo o hipertiroidismo? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m1"><label class="intake-gender-card"><input type="radio" name="s_hipo_hipertiroidismo" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hipo_hipertiroidismo" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m2">¿Tiene enfermedad hepática leve o moderada (hígado graso)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m2"><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_leve" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hepatopatia_leve" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m3">¿Tiene hipertensión arterial no controlada? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m3"><label class="intake-gender-card"><input type="radio" name="s_hta_no_controlada" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hta_no_controlada" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m4">¿Tiene retinopatía diabética no proliferativa? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m4"><label class="intake-gender-card"><input type="radio" name="s_retina_no_prolif" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_retina_no_prolif" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m5">¿Toma insulina actualmente? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m5"><label class="intake-gender-card"><input type="radio" name="s_insulina_actual" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_insulina_actual" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m6">¿Toma sulfonilureas (glibenclamida u otros)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m6"><label class="intake-gender-card"><input type="radio" name="s_sulfonilureas" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_sulfonilureas" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m7">¿Toma anticoagulantes (warfarina, rivaroxabán)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m7"><label class="intake-gender-card"><input type="radio" name="s_anticoagulantes" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_anticoagulantes" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m8">¿Ha tenido episodios de hipoglucemia frecuentes? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m8"><label class="intake-gender-card"><input type="radio" name="s_hipoglucemias" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_hipoglucemias" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m9">¿Tiene apnea del sueño severa no tratada? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m9"><label class="intake-gender-card"><input type="radio" name="s_apnea_severa" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_apnea_severa" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m10">¿Tiene antecedente de pancreatitis leve o única? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m10"><label class="intake-gender-card"><input type="radio" name="s_pancreatitis_leve" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_pancreatitis_leve" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-m11">¿Tiene enfermedad renal crónica leve o moderada? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-m11"><label class="intake-gender-card"><input type="radio" name="s_renal_leve_mod" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_renal_leve_mod" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+
         </div>
-      </details>
 
+        <div class="intake-step" data-wizard-step="5" hidden>
+        <h3 class="intake-step__title">Riesgo leve</h3>
+          <p class="intake-field-hint">La edad se tomará de la fecha de nacimiento que indicó al inicio.</p>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l1">¿Tiene depresión o ansiedad actualmente? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l1"><label class="intake-gender-card"><input type="radio" name="s_depresion_ansiedad" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_depresion_ansiedad" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l2">¿Tiene trastorno de conducta alimentaria (anorexia/bulimia)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l2"><label class="intake-gender-card"><input type="radio" name="s_tca" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_tca" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l3">¿Usa anticonceptivos hormonales? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l3"><label class="intake-gender-card"><input type="radio" name="s_anticonceptivos" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_anticonceptivos" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l4">¿Fuma o consume tabaco? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l4"><label class="intake-gender-card"><input type="radio" name="s_tabaco" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_tabaco" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l5">¿Consume alcohol regularmente? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l5"><label class="intake-gender-card"><input type="radio" name="s_alcohol_regular" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_alcohol_regular" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l6">¿Tiene síndrome de ovario poliquístico (SOP)? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l6"><label class="intake-gender-card"><input type="radio" name="s_sop" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_sop" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+          <div class="intake-score-yn"><p class="intake-pill-question" id="s-l7">¿Tiene corticosteroides de uso crónico? <span class="req" aria-hidden="true">*</span></p><div class="intake-gender-grid" role="radiogroup" aria-labelledby="s-l7"><label class="intake-gender-card"><input type="radio" name="s_corticosteroides" value="si" class="intake-gender-input" required><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">Sí</span></label><label class="intake-gender-card"><input type="radio" name="s_corticosteroides" value="no" class="intake-gender-input"><span class="intake-gender-ring" aria-hidden="true"></span><span class="intake-gender-text">No</span></label></div></div>
+
+        </div>
+
+        <div class="intake-step" data-wizard-step="6" hidden>
       <fieldset>
         <legend class="intake-legend-plain">Comentarios adicionales</legend>
         <div class="intake-row">
@@ -1535,9 +1603,17 @@
 
       <div class="intake-actions">
         <button type="submit" class="intake-submit" id="btn-enviar">Enviar evaluación</button>
-        <p class="intake-submit-note">Al enviar verá su <strong>puntaje de idoneidad</strong> (0%–100%) y si, según sus respuestas, sería <strong>apto para el tratamiento</strong>. No sustituye una consulta médica.</p>
+        <p class="intake-submit-note">Verá su <strong>porcentaje de aceptación</strong> y si es <strong>apto</strong> según este cuestionario. No sustituye una consulta médica.</p>
         <p class="intake-form-msg" id="form-error" role="alert"></p>
       </div>
+        </div>
+
+      <div class="intake-wizard-nav" id="intake-wizard-nav">
+        <button type="button" class="intake-wizard-btn intake-wizard-btn--ghost" id="btn-wizard-prev" disabled>Anterior</button>
+        <button type="button" class="intake-wizard-btn intake-wizard-btn--primary" id="btn-wizard-next">Siguiente</button>
+      </div>
+      </div>
+
     </form>
 
     <div class="intake-resultado" id="intake-resultado" hidden>
@@ -1617,7 +1693,7 @@
             absolute: true,
             aptoProducto: false,
             verdict: 'Contraindicación absoluta',
-            detalle: 'Según sus respuestas hay al menos una contraindicación absoluta. El puntaje es 0%. No debe iniciar ni adquirir el tratamiento sin valoración médica presencial.',
+            detalle: 'Según sus respuestas hay al menos una contraindicación absoluta. No debe iniciar ni adquirir el tratamiento sin valoración médica presencial.',
             deductions: absoluteHits.map(function (l) { return { label: l, p: 100 }; })
           };
         }
@@ -1681,19 +1757,19 @@
         if (score === 0) {
           band = 'cero';
           verdict = 'No apto — Riesgo muy alto';
-          detalle = 'El puntaje alcanzó 0% por acumulación de factores. Requiere evaluación presencial antes de cualquier tratamiento farmacológico para pérdida de peso.';
+          detalle = 'La combinación de sus respuestas indica un perfil de riesgo muy elevado. Requiere evaluación presencial antes de cualquier tratamiento farmacológico para pérdida de peso.';
         } else if (score >= 1 && score <= 49) {
           band = 'riesgo_alto';
           verdict = 'No apto — Riesgo alto';
-          detalle = 'El puntaje está entre 1% y 49%. Según la escala, no se considera idoneidad suficiente sin una revisión médica exhaustiva.';
+          detalle = 'Según este cuestionario no alcanza un nivel de aceptación suficiente sin una revisión médica exhaustiva.';
         } else if (score >= 50 && score <= 74) {
           band = 'valoracion';
           verdict = 'Requiere valoración médica adicional';
-          detalle = 'El puntaje está entre 50% y 74%. Puede haber margen, pero un médico debe confirmar estudios, dosis y riesgos antes de iniciar.';
+          detalle = 'Hay aspectos que un médico debe confirmar (estudios, dosis y riesgos) antes de considerar el tratamiento.';
         } else {
           band = 'apto';
           verdict = 'Apto para tratamiento (orientativo)';
-          detalle = 'El puntaje está entre 75% y 100% y no se registraron contraindicaciones absolutas. La decisión final sigue siendo del profesional de salud.';
+          detalle = 'Su porcentaje de aceptación es favorable y no se registraron contraindicaciones absolutas. La decisión final sigue siendo del profesional de salud.';
           aptoProducto = true;
         }
 
@@ -1717,7 +1793,7 @@
         var dedList = document.getElementById('resultado-deducciones-list');
         if (!pct || !verdictEl || !detalleEl || !aptEl || !dedWrap || !dedList || !resultadoPanel) return;
 
-        pct.textContent = res.score + '%';
+        pct.textContent = 'Porcentaje de aceptación: ' + res.score + '%';
         verdictEl.textContent = res.verdict;
         verdictEl.className = 'intake-resultado__verdict';
         if (res.band === 'apto') verdictEl.classList.add('is-ok');
@@ -1729,28 +1805,17 @@
         aptEl.className = 'intake-resultado__aptitud';
         if (res.aptoProducto) {
           aptEl.classList.add('intake-resultado__aptitud--si');
-          aptEl.textContent = '¿Apto para adquirir el producto según este cuestionario? Sí — puntaje del 75% al 100% y sin contraindicaciones absolutas.';
+          aptEl.textContent = '¿Apto según este cuestionario? Sí.';
         } else if (res.band === 'valoracion') {
           aptEl.classList.add('intake-resultado__aptitud--no');
-          aptEl.textContent = '¿Apto para adquirir el producto según este cuestionario? No de forma automática — puntaje entre 50% y 74%; se requiere valoración médica adicional.';
+          aptEl.textContent = '¿Apto según este cuestionario? No de forma automática; se requiere valoración médica adicional.';
         } else {
           aptEl.classList.add('intake-resultado__aptitud--no');
-          aptEl.textContent = '¿Apto para adquirir el producto según este cuestionario? No — contraindicación absoluta, puntaje 0% o rango del 1% al 49%.';
+          aptEl.textContent = '¿Apto según este cuestionario? No.';
         }
 
         dedList.innerHTML = '';
-        if (res.deductions && res.deductions.length) {
-          res.deductions.forEach(function (d) {
-            var li = document.createElement('li');
-            li.textContent = res.absolute
-              ? d.label + ' (contraindicación absoluta)'
-              : d.label + ' (−' + d.p + ' puntos del 100% inicial)';
-            dedList.appendChild(li);
-          });
-          dedWrap.hidden = false;
-        } else {
-          dedWrap.hidden = true;
-        }
+        dedWrap.hidden = true;
 
         resultadoPanel.hidden = false;
         resultadoPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1959,20 +2024,91 @@
       if (nacMes) nacMes.addEventListener('change', refreshDobDayOptions);
       if (nacAnio) nacAnio.addEventListener('change', refreshDobDayOptions);
 
+      var wizard = document.getElementById('intake-wizard');
+      var wizardProgress = document.getElementById('wizard-progress');
+      var btnPrev = document.getElementById('btn-wizard-prev');
+      var btnNext = document.getElementById('btn-wizard-next');
+      var steps = form ? Array.prototype.slice.call(form.querySelectorAll('.intake-step')) : [];
+      var totalSteps = steps.length;
+      var stepIndex = 0;
+
+      function goToStep(idx, doScroll) {
+        if (!steps.length) return;
+        stepIndex = Math.max(0, Math.min(idx, totalSteps - 1));
+        steps.forEach(function (el, i) {
+          if (i === stepIndex) {
+            el.classList.add('is-active');
+            el.hidden = false;
+          } else {
+            el.classList.remove('is-active');
+            el.hidden = true;
+          }
+        });
+        if (wizardProgress) {
+          wizardProgress.textContent = 'Paso ' + (stepIndex + 1) + ' de ' + totalSteps;
+        }
+        if (btnPrev) btnPrev.disabled = stepIndex === 0;
+        if (btnNext) btnNext.hidden = stepIndex === totalSteps - 1;
+        if (doScroll !== false && wizard) {
+          wizard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+
+      function validateStep(idx) {
+        var step = steps[idx];
+        if (!step) return true;
+        var controls = step.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < controls.length; i++) {
+          var el = controls[i];
+          if (el.type === 'hidden') continue;
+          if (typeof el.checkValidity === 'function' && el.willValidate) {
+            if (!el.checkValidity()) {
+              el.reportValidity();
+              return false;
+            }
+          }
+        }
+        if (idx === 0) {
+          var dobErr = validateDob();
+          if (dobErr) {
+            showError(dobErr);
+            var dobSec = document.getElementById('section-dob');
+            if (dobSec) dobSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return false;
+          }
+        }
+        showError('');
+        return true;
+      }
+
+      function validateAllSteps() {
+        for (var s = 0; s < totalSteps; s++) {
+          if (!validateStep(s)) {
+            goToStep(s);
+            return false;
+          }
+        }
+        return true;
+      }
+
+      if (btnPrev && btnNext && totalSteps > 0) {
+        goToStep(0, false);
+
+        btnPrev.addEventListener('click', function () {
+          if (stepIndex > 0) goToStep(stepIndex - 1);
+        });
+
+        btnNext.addEventListener('click', function () {
+          if (!validateStep(stepIndex)) return;
+          if (stepIndex < totalSteps - 1) goToStep(stepIndex + 1);
+        });
+      }
+
       form.addEventListener('submit', function (e) {
         e.preventDefault();
         showError('');
 
-        if (!form.checkValidity()) {
-          form.reportValidity();
-          return;
-        }
-
-        var dobErr = validateDob();
-        if (dobErr) {
-          showError(dobErr);
-          var dobSec = document.getElementById('section-dob');
-          if (dobSec) dobSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (!validateAllSteps()) {
           return;
         }
 
