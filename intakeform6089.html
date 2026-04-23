@@ -52,6 +52,7 @@
       --intake-q-fill: #fffef9;
       --intake-q-fill-hover: #ffffff;
       --intake-q-fill-checked: #ffffff;
+      --intake-topbar-sticky-h: 65px;
     }
 
     *,
@@ -80,7 +81,7 @@
       z-index: 40;
       background-color: var(--bg-surface);
       box-shadow: 0 4px 20px rgba(56, 49, 44, 0.06);
-  }
+    }
 
   .intake-topbar {
       min-height: 64px;
@@ -95,9 +96,28 @@
     }
 
     .intake-stepper {
+      position: sticky;
+      z-index: 35;
+      top: env(safe-area-inset-top, 0px);
       padding: 14px 20px 16px;
       background-color: var(--stepper-bg);
       border-bottom: 1px solid var(--border-soft);
+      box-shadow: 0 1px 0 rgba(56, 49, 44, 0.04);
+    }
+
+    @media (min-width: 768px) {
+      .intake-stepper {
+        top: calc(var(--intake-topbar-sticky-h) + env(safe-area-inset-top, 0px));
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      .intake-sticky-head {
+        position: static;
+        z-index: auto;
+        background: transparent;
+        box-shadow: none;
+      }
     }
 
     .intake-stepper__list {
@@ -156,6 +176,32 @@
     .intake-stepper__item.is-active .intake-stepper__label {
       color: var(--stepper-active);
       font-weight: 600;
+    }
+
+    .intake-stepper__item.is-complete .intake-stepper__icon {
+      border-color: var(--stepper-active);
+      background: var(--stepper-active);
+    }
+
+    .intake-stepper__item.is-complete .intake-stepper__icon::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 5px;
+      height: 9px;
+      margin: -6px 0 0 -3px;
+      border: solid #fff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .intake-stepper__item.is-complete .intake-stepper__label {
+      color: var(--stepper-active);
+      font-weight: 500;
+      opacity: 0.88;
     }
 
     .intake-stepper__connector {
@@ -1306,31 +1352,32 @@
 
 <body>
   <header class="intake-sticky-head">
-<div class="intake-topbar">
+    <div class="intake-topbar">
       <div class="intake-brand" role="img" aria-label="Medilink Colombia">
         <img src="images/LOGO-MEDILINK.png" alt="" class="intake-logo" width="160" height="40">
       </div>
       <img src="https://medvi.org/treviews.png" alt="Reseñas verificadas" class="intake-trust" width="230" height="46">
     </div>
-    <nav class="intake-stepper" aria-label="Pasos del formulario">
-      <div class="intake-stepper__list" role="list">
-        <div class="intake-stepper__item is-active" role="listitem" aria-current="step">
-          <span class="intake-stepper__icon" aria-hidden="true"></span>
-          <span class="intake-stepper__label">Inicio</span>
-        </div>
-        <span class="intake-stepper__connector" aria-hidden="true"></span>
-        <div class="intake-stepper__item" role="listitem">
-          <span class="intake-stepper__icon" aria-hidden="true"></span>
-          <span class="intake-stepper__label">Datos</span>
-        </div>
-        <span class="intake-stepper__connector" aria-hidden="true"></span>
-        <div class="intake-stepper__item" role="listitem">
-          <span class="intake-stepper__icon" aria-hidden="true"></span>
-          <span class="intake-stepper__label">Elegibilidad</span>
-        </div>
-      </div>
-    </nav>
   </header>
+
+  <nav class="intake-stepper" id="intake-stepper" aria-label="Pasos del formulario">
+    <div class="intake-stepper__list" role="list">
+      <div class="intake-stepper__item" id="intake-stepper-inicio" role="listitem">
+        <span class="intake-stepper__icon" aria-hidden="true"></span>
+        <span class="intake-stepper__label">Inicio</span>
+      </div>
+      <span class="intake-stepper__connector" aria-hidden="true"></span>
+      <div class="intake-stepper__item" id="intake-stepper-datos" role="listitem">
+        <span class="intake-stepper__icon" aria-hidden="true"></span>
+        <span class="intake-stepper__label">Datos</span>
+      </div>
+      <span class="intake-stepper__connector" aria-hidden="true"></span>
+      <div class="intake-stepper__item" id="intake-stepper-elegibilidad" role="listitem">
+        <span class="intake-stepper__icon" aria-hidden="true"></span>
+        <span class="intake-stepper__label">Elegibilidad</span>
+      </div>
+    </div>
+  </nav>
 
   <main class="intake-main">
     <section class="intake-hero-intro" aria-labelledby="intake-hero-title">
@@ -1817,6 +1864,8 @@
         dedList.innerHTML = '';
         dedWrap.hidden = true;
 
+        updateStickyStepper(stepIndex, true);
+
         resultadoPanel.hidden = false;
         resultadoPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -2032,6 +2081,123 @@
       var totalSteps = steps.length;
       var stepIndex = 0;
 
+      var DRAFT_KEY = 'medilink_intake_draft_v1';
+      var isRestoring = false;
+      var draftSaveTimer = null;
+
+      function buildDraftObject() {
+        var fields = {};
+        if (!form) return { v: 1, stepIndex: stepIndex, fields: fields, at: Date.now() };
+        var elements = form.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < elements.length; i++) {
+          var el = elements[i];
+          if (!el.name || el.disabled || el.type === 'file') continue;
+          if (el.type === 'submit' || el.type === 'button') continue;
+          if (el.type === 'checkbox') {
+            if (!fields[el.name]) fields[el.name] = [];
+            if (el.checked) fields[el.name].push(el.value || 'on');
+            continue;
+          }
+          if (el.type === 'radio') {
+            if (el.checked) fields[el.name] = el.value;
+            continue;
+          }
+          fields[el.name] = el.value;
+        }
+        return { v: 1, stepIndex: stepIndex, fields: fields, at: Date.now() };
+      }
+
+      function saveDraftNow() {
+        if (isRestoring || !form || form.hidden) return;
+        try {
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(buildDraftObject()));
+        } catch (err) { /* cuota o modo privado */ }
+      }
+
+      function scheduleDraftSave() {
+        if (isRestoring || !form || form.hidden) return;
+        clearTimeout(draftSaveTimer);
+        draftSaveTimer = setTimeout(saveDraftNow, 280);
+      }
+
+      function clearDraft() {
+        try {
+          localStorage.removeItem(DRAFT_KEY);
+        } catch (err) { /* noop */ }
+      }
+
+      function loadDraftRaw() {
+        try {
+          var raw = localStorage.getItem(DRAFT_KEY);
+          if (!raw) return null;
+          var data = JSON.parse(raw);
+          if (!data || typeof data.fields !== 'object' || data.fields === null) return null;
+          return data;
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function applyDraftFields(fields) {
+        if (!form || !fields) return;
+        var elements = form.querySelectorAll('input, select, textarea');
+        for (var i = 0; i < elements.length; i++) {
+          var el = elements[i];
+          if (!el.name || el.disabled || el.type === 'file') continue;
+          if (!Object.prototype.hasOwnProperty.call(fields, el.name)) continue;
+          var val = fields[el.name];
+          if (el.type === 'radio') {
+            el.checked = val === el.value;
+          } else if (el.type === 'checkbox') {
+            var arr = Array.isArray(val) ? val : [val];
+            var sv = el.value || 'on';
+            el.checked = false;
+            for (var j = 0; j < arr.length; j++) {
+              if (String(arr[j]) === sv) {
+                el.checked = true;
+                break;
+              }
+            }
+          } else {
+            el.value = val != null ? String(val) : '';
+          }
+        }
+      }
+
+      function syncDobUiAfterRestore() {
+        if (typeof refreshDobDayOptions === 'function') refreshDobDayOptions();
+        ['nac_mes', 'nac_dia', 'nac_anio'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el && typeof el.__intakeDdRefresh === 'function') el.__intakeDdRefresh();
+        });
+      }
+
+      function updateStickyStepper(wizStep, resultsVisible) {
+        var inicio = document.getElementById('intake-stepper-inicio');
+        var datos = document.getElementById('intake-stepper-datos');
+        var eleg = document.getElementById('intake-stepper-elegibilidad');
+        [inicio, datos, eleg].forEach(function (el) {
+          if (!el) return;
+          el.classList.remove('is-active', 'is-complete');
+          el.removeAttribute('aria-current');
+        });
+        var activeEl = inicio;
+        if (resultsVisible) {
+          activeEl = eleg;
+        } else if (wizStep >= 2) {
+          activeEl = eleg;
+        } else if (wizStep === 1) {
+          activeEl = datos;
+        }
+        if (inicio && (resultsVisible || wizStep >= 1)) inicio.classList.add('is-complete');
+        if (datos && (resultsVisible || wizStep >= 2)) datos.classList.add('is-complete');
+        if (activeEl) {
+          activeEl.classList.remove('is-complete');
+          activeEl.classList.add('is-active');
+          activeEl.setAttribute('aria-current', 'step');
+        }
+      }
+
       function goToStep(idx, doScroll) {
         if (!steps.length) return;
         stepIndex = Math.max(0, Math.min(idx, totalSteps - 1));
@@ -2052,6 +2218,8 @@
         if (doScroll !== false && wizard) {
           wizard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
+        updateStickyStepper(stepIndex, false);
+        saveDraftNow();
       }
 
       function validateStep(idx) {
@@ -2091,8 +2259,26 @@
         return true;
       }
 
+      if (form) {
+        form.addEventListener('input', scheduleDraftSave);
+        form.addEventListener('change', scheduleDraftSave);
+      }
+
+      window.addEventListener('pagehide', saveDraftNow);
+
       if (btnPrev && btnNext && totalSteps > 0) {
-        goToStep(0, false);
+        var draft = loadDraftRaw();
+        if (draft && form) {
+          isRestoring = true;
+          applyDraftFields(draft.fields);
+          syncDobUiAfterRestore();
+          var si = typeof draft.stepIndex === 'number' ? draft.stepIndex : 0;
+          goToStep(Math.max(0, Math.min(si, totalSteps - 1)), false);
+          isRestoring = false;
+          saveDraftNow();
+        } else {
+          goToStep(0, false);
+        }
 
         btnPrev.addEventListener('click', function () {
           if (stepIndex > 0) goToStep(stepIndex - 1);
@@ -2102,6 +2288,8 @@
           if (!validateStep(stepIndex)) return;
           if (stepIndex < totalSteps - 1) goToStep(stepIndex + 1);
         });
+      } else {
+        updateStickyStepper(0, false);
       }
 
       form.addEventListener('submit', function (e) {
@@ -2149,6 +2337,7 @@
           } catch (err) { /* noop */ }
         }
 
+        clearDraft();
         form.hidden = true;
         renderResultado(elig);
       });
