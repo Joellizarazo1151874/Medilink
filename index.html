@@ -349,17 +349,88 @@
       max-width: 100%;
     }
 
+    /* Vídeos en las tarjetas “Historias reales” (el contenedor es flex + alto fijo en medvi-ready.css) */
+    .featured-products-section .featured-product-image video.featured-product-img.photo {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      align-self: stretch;
+      object-fit: cover;
+      object-position: center 30%;
+      background: #0f172a;
+    }
+
     @media screen and (max-width: 991px) {
       .featured-products-grid.featured-products-grid--three {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
+    /* Carrusel horizontal solo en móvil (Historias reales) */
+    .mlk-stories-dots {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 0 16px;
+    }
+
+    .mlk-stories-dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .mlk-stories-dot.is-active {
+      background: var(--evergreen, #2FA3B4);
+      transform: scale(1.15);
+    }
+
     @media screen and (max-width: 767px) {
-      .featured-products-grid.featured-products-grid--three {
-        grid-template-columns: repeat(3, minmax(260px, 1fr));
+      .mlk-stories-carousel {
+        position: relative;
+        margin-left: -16px;
+        margin-right: -16px;
       }
-    } 
+
+      .mlk-stories-carousel .featured-products-grid.featured-products-grid--three {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        scroll-padding-inline: max(16px, env(safe-area-inset-right));
+        padding: 0 max(16px, env(safe-area-inset-left)) 10px max(16px, env(safe-area-inset-right));
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        overscroll-behavior-x: contain;
+        grid-template-columns: unset;
+      }
+
+      .mlk-stories-carousel .featured-products-grid.featured-products-grid--three::-webkit-scrollbar {
+        display: none;
+      }
+
+      .mlk-stories-carousel .featured-product-card {
+        flex: 0 0 min(400px, calc(100vw - 40px));
+        scroll-snap-align: center;
+        min-width: 0;
+      }
+
+      .mlk-stories-dots {
+        display: flex;
+      }
+    }
 
     /* Botón flotante WhatsApp (marca oficial: #25D366); CTA solo al pasar el mouse o al interactuar */
     .whatsapp-float {
@@ -780,7 +851,296 @@
       padding: 0 20px;
     }
 
-    /* Móvil */
+    /* ===== Calculadora peso ideal (kg) ===== */
+    .mlk-ideal-section {
+      padding: 72px 20px 80px;
+      background: #ffffff;
+      border-top: 1px solid rgba(226, 232, 240, 0.9);
+    }
+
+    .mlk-ideal-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: clamp(28px, 5vw, 56px);
+      align-items: center;
+    }
+
+    .mlk-ideal-title {
+      margin: 0 0 18px;
+      font-size: clamp(1.65rem, 4.2vw, 2.35rem);
+      font-weight: 700;
+      line-height: 1.18;
+      color: #0f172a;
+    }
+
+    .mlk-ideal-text {
+      margin: 0 0 26px;
+      font-size: clamp(1rem, 2.2vw, 1.1rem);
+      line-height: 1.65;
+      color: #334155;
+    }
+
+    .mlk-ideal-text strong {
+      font-weight: 700;
+    }
+
+    .mlk-ideal-cta {
+      display: inline-flex;
+    }
+
+    .mlk-ideal-card {
+      background: linear-gradient(165deg, #faf6f0 0%, #f3efe8 100%);
+      border-radius: 24px;
+      padding: clamp(22px, 4vw, 32px) clamp(20px, 3vw, 28px);
+      border: 1px solid rgba(203, 190, 168, 0.35);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+    }
+
+    .mlk-ideal-label {
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .mlk-ideal-label + .mlk-ideal-big {
+      margin-top: 0;
+    }
+
+    .mlk-ideal-big {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin: 0 0 18px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mlk-ideal-big span:first-child {
+      font-size: clamp(2.5rem, 7vw, 3.25rem);
+      font-weight: 700;
+      line-height: 1;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+    }
+
+    .mlk-ideal-big--accent span:first-child {
+      color: #21727E;
+    }
+
+    .mlk-ideal-unit {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .mlk-ideal-slider-wrap {
+      margin: 6px 0 22px;
+    }
+
+    .mlk-ideal-slider-wrap input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #cbd5e1 0%, #e2e8f0 100%);
+      outline: none;
+    }
+
+    .mlk-ideal-slider-wrap input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #e8c96b 0%, #c6a04a 55%, #a8842f 100%);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+      cursor: pointer;
+    }
+
+    .mlk-ideal-slider-wrap input[type="range"]::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #e8c96b 0%, #c6a04a 55%, #a8842f 100%);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.2);
+      cursor: pointer;
+    }
+
+    .mlk-ideal-disclaimer {
+      margin: 16px 0 0;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #94a3b8;
+    }
+
+    @media (max-width: 900px) {
+      .mlk-ideal-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .mlk-ideal-copy {
+        text-align: center;
+      }
+
+      .mlk-ideal-cta {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (max-width: 539px) {
+      .mlk-ideal-section {
+        padding: 48px 16px 56px;
+      }
+    }
+
+    /* ===== Confianza — medicamento + testimonios de fondo ===== */
+    .mlk-trust-section {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(56px, 8vw, 88px) 20px clamp(64px, 9vw, 96px);
+      background: #ffffff;
+      border-top: 1px solid rgba(226, 232, 240, 0.9);
+    }
+
+    /* Bg centrado y acotado para que los textos no se dispersen */
+    .mlk-trust-bg {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 920px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .mlk-trust-float {
+      position: absolute;
+      max-width: min(175px, 26vw);
+      font-size: clamp(11px, 1.3vw, 13.5px);
+      line-height: 1.45;
+      color: rgba(100, 116, 139, 0.55);
+      font-weight: 500;
+    }
+
+    .mlk-trust-float p { margin: 0 0 5px; }
+
+    .mlk-trust-float-meta {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: rgba(33, 114, 126, 0.40);
+    }
+
+    /* Izquierda: texto alineado a la derecha (hacia la imagen) */
+    .mlk-trust-float--tl { top: 32%;    left: 16%; transform: rotate(1deg);   text-align: right; }
+    .mlk-trust-float--ml { top: 48%;    left: 16%; transform: rotate(-1deg);   text-align: right; }
+    .mlk-trust-float--bl { bottom: 20%; left: 16%; transform: rotate(1deg);    text-align: right; }
+    /* Derecha: texto alineado a la izquierda (hacia la imagen) */
+    .mlk-trust-float--tr { top: 30%;    right: 16%; transform: rotate(1.5deg); }
+    .mlk-trust-float--mr { top: 48%;    right: 16%; transform: rotate(2deg);   }
+    .mlk-trust-float--br { bottom: 20%; right: 16%; transform: rotate(-1.5deg);}
+
+    .mlk-trust-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 580px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .mlk-trust-kicker {
+      margin: 0 0 10px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.02em;
+    }
+
+    .mlk-trust-stars {
+      margin: 0 0 18px;
+      font-size: 22px;
+      line-height: 1;
+      letter-spacing: 2px;
+      color: #d4a012;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+    }
+
+    .mlk-trust-quote {
+      margin: 0 0 14px;
+      font-size: clamp(1.45rem, 4vw, 2.1rem);
+      font-weight: 700;
+      line-height: 1.25;
+      color: #0f172a;
+    }
+
+    .mlk-trust-verify {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 28px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .mlk-trust-check {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      color: #16a34a;
+    }
+
+    .mlk-trust-stage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: min(52vw, 420px);
+      margin: 0 0 28px;
+    }
+
+    .mlk-trust-vial-wrap {
+      will-change: transform;
+      transform-origin: 50% 60%;
+    }
+
+    .mlk-trust-vial-img {
+      display: block;
+      width: auto;
+      max-width: min(480px, 100%);
+      height: auto;
+      margin: 0 auto;
+      filter: drop-shadow(0 28px 48px rgba(15, 23, 42, 0.18));
+    }
+
+    .mlk-trust-hsa {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .mlk-trust-hsa-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 640px) {
+      .mlk-trust-bg { display: none; }
+      .mlk-trust-stage { min-height: min(72vw, 360px); }
+    }
+
     @media (max-width: 539px) {
       .mlk-success-section {
         padding: 56px 0 52px;
@@ -808,6 +1168,9 @@
     @media (prefers-reduced-motion: reduce) {
       .mlk-carousel-track {
         scroll-behavior: auto;
+      }
+      .mlk-trust-vial-wrap {
+        will-change: auto;
       }
     }
   </style>
@@ -1070,6 +1433,139 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
       </div>
     </section>
 
+    <!-- ===== Calculadora peso ideal (kg) ===== -->
+    <section class="mlk-ideal-section" aria-labelledby="mlk-ideal-heading">
+      <div class="mlk-ideal-inner">
+        <div class="mlk-ideal-copy">
+          <h2 id="mlk-ideal-heading" class="mlk-ideal-title">
+            ¿Quieres <span class="text-pastel-blue">alcanzar tu</span> peso ideal rápidamente?
+          </h2>
+          <p class="mlk-ideal-text">
+            No es magia, es <strong class="text-pastel-blue">ciencia metabólica</strong>. El GLP-1 es una hormona natural
+            que regula el apetito y el azúcar en sangre, <strong class="text-pastel-blue">mejorando el metabolismo</strong>
+            y ayudando a reducir los antojos.
+          </p>
+          <a href="intakeform6089.html?afid=org" class="primary-cta pastel-cta w-button mlk-ideal-cta">Comenzar</a>
+        </div>
+        <div class="mlk-ideal-card">
+          <p class="mlk-ideal-label">Seleccione su peso actual:</p>
+          <div class="mlk-ideal-big" aria-live="polite">
+            <span id="mlk-calc-current">82</span>
+            <span class="mlk-ideal-unit">kg</span>
+          </div>
+          <div class="mlk-ideal-slider-wrap">
+            <input type="range" id="mlk-calc-slider" min="50" max="180" step="1" value="82"
+              aria-label="Peso actual en kilogramos"
+              aria-valuemin="50" aria-valuemax="180" aria-valuenow="82"
+              aria-describedby="mlk-calc-disclaimer">
+          </div>
+          <p class="mlk-ideal-label">Peso que podrías perder:</p>
+          <div class="mlk-ideal-big mlk-ideal-big--accent" aria-live="polite">
+            <span id="mlk-calc-loss">19</span>
+            <span class="mlk-ideal-unit">kg</span>
+          </div>
+          <p id="mlk-calc-disclaimer" class="mlk-ideal-disclaimer">
+            Cálculo orientativo (~22,7&nbsp;% del peso actual). Los resultados reales dependen del plan médico, la adherencia
+            y las características de cada persona.
+          </p>
+        </div>
+      </div>
+    </section>
+    <script>
+      (function () {
+        var slider = document.getElementById('mlk-calc-slider');
+        var curEl = document.getElementById('mlk-calc-current');
+        var lossEl = document.getElementById('mlk-calc-loss');
+        if (!slider || !curEl || !lossEl) return;
+        var RATIO = 0.227;
+        function sync() {
+          var kg = parseInt(slider.value, 10);
+          if (isNaN(kg)) return;
+          curEl.textContent = String(kg);
+          lossEl.textContent = String(Math.round(kg * RATIO));
+          slider.setAttribute('aria-valuenow', String(kg));
+        }
+        slider.addEventListener('input', sync);
+        slider.addEventListener('change', sync);
+        sync();
+      })();
+    </script>
+
+    <!-- ===== Confianza — medicamento + testimonios de fondo ===== -->
+    <section class="mlk-trust-section" id="mlk-trust-section" aria-labelledby="mlk-trust-heading">
+      <div class="mlk-trust-bg" aria-hidden="true">
+        <div class="mlk-trust-float mlk-trust-float--tl">
+          <p>Bajé 9 kg en 2 meses sin pasar hambre. Nunca creí que fuera posible.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+        <div class="mlk-trust-float mlk-trust-float--tr">
+          <p>Llevaba 5 años luchando con mi peso. Con Medilink finalmente lo logré.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+        <div class="mlk-trust-float mlk-trust-float--ml">
+          <p>El médico resolvió todas mis dudas. La consulta fue rápida y muy clara.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+        <div class="mlk-trust-float mlk-trust-float--mr">
+          <p>Me sorprendió lo personalizado del tratamiento. Sienten que cada caso importa.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+        <div class="mlk-trust-float mlk-trust-float--bl">
+          <p>Desde la consulta hasta recibir el medicamento todo fue rápido y sin complicaciones.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+        <div class="mlk-trust-float mlk-trust-float--br">
+          <p>La enfermera practicante fue muy paciente y profesional en cada consulta.</p>
+          <span class="mlk-trust-float-meta">✓ Cliente verificado de Medilink Colombia</span>
+        </div>
+      </div>
+      <div class="mlk-trust-inner">
+        <div class="mlk-trust-stars" role="img" aria-label="Valoración 5 de 5 estrellas">
+          <span aria-hidden="true">★★★★★</span>
+        </div>
+        <h2 id="mlk-trust-heading" class="mlk-trust-quote">
+          Cuando nada más funcionaba, <span class="text-pastel-blue">Medilink sí lo hace</span>.
+        </h2>
+        <p class="mlk-trust-verify">
+          <svg class="mlk-trust-check" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0a8 8 0 1 0 8 8A8 8 0 0 0 8 0zm3.7 5.35-4.5 4.5a1 1 0 0 1-1.42 0L4.3 8.35a1 1 0 1 1 1.42-1.42l.88.89 3.78-3.78a1 1 0 0 1 1.42 1.41z"/></svg>
+          Cliente verificado de Medilink Colombia
+        </p>
+        <div class="mlk-trust-stage">
+          <div id="mlk-trust-vial-wrap" class="mlk-trust-vial-wrap">
+            <img id="mlk-trust-vial" src="images/medilink.png" alt="Vial GLP1+GIP tirzepatida con jeringa — Medilink Colombia"
+              class="mlk-trust-vial-img" width="520" height="520" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <div class="mlk-trust-hsa">
+          <span class="mlk-trust-hsa-icon" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="28" height="28"><circle cx="16" cy="16" r="14" fill="#e0f2fe" stroke="#21727E" stroke-width="1.5"/><path d="M10 16l4 4 8-8" fill="none" stroke="#21727E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="mlk-trust-hsa-text">Elegible para cuentas HSA / FSA</span>
+        </div>
+      </div>
+    </section>
+    <script>
+      (function () {
+        var section = document.getElementById('mlk-trust-section');
+        var wrap = document.getElementById('mlk-trust-vial-wrap');
+        if (!section || !wrap) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        function onScroll() {
+          var r = section.getBoundingClientRect();
+          var vh = window.innerHeight || 1;
+          var visible = Math.min(r.bottom, vh) - Math.max(r.top, 0);
+          var t = Math.max(0, Math.min(1, visible / (vh * 0.85)));
+          var ty = (t - 0.5) * 36;
+          var rot = (t - 0.5) * 10;
+          var sc = 1 + (t - 0.5) * 0.06;
+          wrap.style.transform = 'translate3d(0,' + ty.toFixed(1) + 'px,0) rotate(' + rot.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll);
+        onScroll();
+      })();
+    </script>
+
     <!-- ===== Casos de Éxito ===== -->
     <section class="mlk-success-section">
 
@@ -1218,36 +1714,106 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
         <p class="featured-products-copy">Conoce casos de pacientes que lograron bajar de peso con tratamiento médico y
           acompañamiento profesional, sin depender de rutinas de ejercicio intensas.</p>
       </div>
-      <div class="featured-products-grid featured-products-grid--three">
-        <article class="featured-product-card">
-          <div class="featured-product-image sky"><img src="images/1.jpeg"
-              alt="Mujer mostrando pantalón demasiado ancho tras reducción de talla"
-              class="featured-product-img photo"></div>
-          <p class="featured-product-price">Cambio visible</p>
-          <h3 class="featured-product-name">Menos centímetros</h3>
-          <p class="featured-product-note">La ropa que antes te quedaba justa puede evidenciar un avance real cuando el plan se sigue con constancia.</p>
-          <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
-        </article>
-        <article class="featured-product-card">
-          <div class="featured-product-image stone"><img src="images/2.png"
-              alt="Mujer sonriente sosteniendo un jean holgado que evidencia pérdida de peso"
-              class="featured-product-img photo"></div>
-          <p class="featured-product-price">Bienestar</p>
-          <h3 class="featured-product-name">Meta alcanzada</h3>
-          <p class="featured-product-note">Un acompañamiento médico puede ayudarte a sentirte mejor contigo mismo y con tu día a día.</p>
-          <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
-        </article>
-        <article class="featured-product-card">
-          <div class="featured-product-image ice"><img src="images/3.jpeg"
-              alt="Hombre sentado frente a una báscula, momento de reflexión sobre su peso"
-              class="featured-product-img photo"></div>
-          <p class="featured-product-price">Tu punto de partida</p>
-          <h3 class="featured-product-name">El primer paso</h3>
-          <p class="featured-product-note">Reconocer dónde estás hoy es el inicio de un camino con apoyo clínico y un plan hecho para ti.</p>
-          <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
-        </article>
+      <div class="mlk-stories-carousel" id="mlk-stories-carousel">
+        <div class="featured-products-grid featured-products-grid--three mlk-stories-track" id="mlk-stories-track">
+          <article class="featured-product-card">
+            <div class="featured-product-image sky">
+              <video class="featured-product-img photo mlk-stories-video" controls playsinline preload="metadata"
+                aria-label="Mujer mostrando pantalón demasiado ancho tras reducción de talla">
+                <source src="images/1.mov" type="video/quicktime">
+                <source src="images/1.mov" type="video/mp4">
+              </video>
+            </div>
+            <p class="featured-product-price">Cambio visible</p>
+            <h3 class="featured-product-name">Menos centímetros</h3>
+            <p class="featured-product-note">La ropa que antes te quedaba justa puede evidenciar un avance real cuando el plan se sigue con constancia.</p>
+            <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
+          </article>
+          <article class="featured-product-card">
+            <div class="featured-product-image stone"><img src="images/2.png"
+                alt="Mujer sonriente sosteniendo un jean holgado que evidencia pérdida de peso"
+                class="featured-product-img photo"></div>
+            <p class="featured-product-price">Bienestar</p>
+            <h3 class="featured-product-name">Meta alcanzada</h3>
+            <p class="featured-product-note">Un acompañamiento médico puede ayudarte a sentirte mejor contigo mismo y con tu día a día.</p>
+            <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
+          </article>
+          <article class="featured-product-card">
+            <div class="featured-product-image ice">
+              <video class="featured-product-img photo mlk-stories-video" controls playsinline preload="metadata"
+                aria-label="Hombre sentado frente a una báscula, momento de reflexión sobre su peso">
+                <source src="images/3.MOV" type="video/quicktime">
+                <source src="images/3.MOV" type="video/mp4">
+              </video>
+            </div>
+            <p class="featured-product-price">Tu punto de partida</p>
+            <h3 class="featured-product-name">El primer paso</h3>
+            <p class="featured-product-note">Reconocer dónde estás hoy es el inicio de un camino con apoyo clínico y un plan hecho para ti.</p>
+            <a href="intakeform6089.html?afid=org" class="featured-product-cta">Comenzar</a>
+          </article>
+        </div>
+        <div class="mlk-stories-dots" id="mlk-stories-dots" role="group" aria-label="Navegación del carrusel">
+          <button type="button" class="mlk-stories-dot is-active" aria-label="Historia 1 de 3" data-mlk-story="0"></button>
+          <button type="button" class="mlk-stories-dot" aria-label="Historia 2 de 3" data-mlk-story="1"></button>
+          <button type="button" class="mlk-stories-dot" aria-label="Historia 3 de 3" data-mlk-story="2"></button>
+        </div>
       </div>
     </section>
+    <script>
+      (function () {
+        var track = document.getElementById('mlk-stories-track');
+        var dotsWrap = document.getElementById('mlk-stories-dots');
+        if (!track || !dotsWrap) return;
+        var cards = track.querySelectorAll('.featured-product-card');
+        var dots = dotsWrap.querySelectorAll('.mlk-stories-dot');
+        var videos = track.querySelectorAll('video.mlk-stories-video');
+        if (!cards.length || !dots.length) return;
+
+        function pauseExcept(index) {
+          videos.forEach(function (v, j) {
+            if (j === index) return;
+            try { v.pause(); } catch (e) { /* noop */ }
+          });
+        }
+
+        function setDotActive(i) {
+          var n = Math.max(0, Math.min(i, dots.length - 1));
+          dots.forEach(function (d, j) { d.classList.toggle('is-active', j === n); });
+          pauseExcept(n);
+        }
+
+        function nearestIndex() {
+          var cx = track.scrollLeft + track.clientWidth / 2;
+          var best = 0;
+          var bestDist = Infinity;
+          cards.forEach(function (card, i) {
+            var mid = card.offsetLeft + card.offsetWidth / 2;
+            var d = Math.abs(mid - cx);
+            if (d < bestDist) { bestDist = d; best = i; }
+          });
+          return best;
+        }
+
+        var scrollEndTimer;
+        track.addEventListener('scroll', function () {
+          clearTimeout(scrollEndTimer);
+          scrollEndTimer = setTimeout(function () {
+            setDotActive(nearestIndex());
+          }, 80);
+        }, { passive: true });
+
+        dots.forEach(function (dot, i) {
+          dot.addEventListener('click', function () {
+            var card = cards[i];
+            if (!card) return;
+            card.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            setDotActive(i);
+          });
+        });
+
+        setDotActive(0);
+      })();
+    </script>
     <footer class="site-footer">
       <div class="site-footer-inner">
         <div>
