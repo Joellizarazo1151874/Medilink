@@ -1448,6 +1448,149 @@
       color: var(--accent-dark);
     }
 
+    /* ── Score loader ─────────────────────────────────────── */
+    .mlk-score-loader-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 44px 28px 40px;
+      animation: mlk-card-in 0.38s ease both;
+    }
+
+    @keyframes mlk-card-in {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .mlk-loader-heading {
+      margin: 0 0 6px;
+      font-family: Lora, Georgia, serif;
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .mlk-loader-sub {
+      margin: 0 0 28px;
+      font-size: 13px;
+      color: #8a9ab0;
+    }
+
+    .mlk-score-ring {
+      position: relative;
+      width: 172px;
+      height: 172px;
+      margin: 0 0 30px;
+    }
+
+    .mlk-score-ring svg {
+      width: 172px;
+      height: 172px;
+      transform: rotate(-90deg);
+      display: block;
+    }
+
+    .mlk-score-ring__track {
+      fill: none;
+      stroke: #ddeaf5;
+      stroke-width: 11;
+    }
+
+    .mlk-score-ring__fill {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 11;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+    }
+
+    .mlk-score-num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      pointer-events: none;
+    }
+
+    .mlk-score-num__val {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--accent-dark);
+      font-variant-numeric: tabular-nums;
+      min-width: 2.8ch;
+      text-align: center;
+    }
+
+    .mlk-score-num__pct {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .mlk-score-num__lbl {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #9baab8;
+      margin-top: 3px;
+    }
+
+    .mlk-analysis-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      text-align: left;
+      width: 100%;
+      max-width: 256px;
+    }
+
+    .mlk-analysis-step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #c0ccd6;
+      opacity: 0;
+      transform: translateX(-10px);
+      transition: opacity 0.38s ease, transform 0.38s ease, color 0.3s ease;
+    }
+
+    .mlk-analysis-step.is-done {
+      opacity: 1;
+      transform: translateX(0);
+      color: var(--accent-dark);
+    }
+
+    .mlk-step-icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mlk-step-icon svg {
+      width: 11px;
+      height: 11px;
+      stroke: #fff;
+      stroke-width: 2.5;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     [hidden] {
       display: none !important;
   }
@@ -1484,6 +1627,7 @@
   </nav>
 
   <main class="intake-main">
+    <div id="intake-welcome-block" class="intake-welcome-block">
     <section class="intake-hero-intro" aria-labelledby="intake-hero-title">
       <figure class="intake-hero-intro__media">
         <img src="images/libre.jpeg" width="1600" height="900" loading="eager" decoding="async"
@@ -1497,12 +1641,13 @@
       <hr class="intake-hero-intro__rule">
     </section>
 
-    <form id="form-evaluacion" class="intake-form" action="#" method="post" autocomplete="on" novalidate>
-
       <header class="intake-form__head">
         <h2>Tu evaluación médica</h2>
         <p>Avance con <strong>Siguiente</strong> paso a paso. Al terminar verá si es <strong>apto</strong> y su <strong>porcentaje de aceptación</strong> estimado; el análisis no se muestra en cada pregunta.</p>
       </header>
+    </div>
+
+    <form id="form-evaluacion" class="intake-form" action="#" method="post" autocomplete="on" novalidate>
 
       <div class="intake-wizard" id="intake-wizard">
         <p class="intake-wizard__progress" id="wizard-progress" aria-live="polite">Paso 1 de 7</p>
@@ -1768,6 +1913,44 @@
     </form>
 
     <div class="mlk-post-flow" id="intake-resultado" hidden aria-live="polite">
+
+      <!-- Animated score loader (shown briefly before result panel) -->
+      <div id="mlk-score-loader" class="mlk-post-card mlk-score-loader-card" hidden aria-live="assertive">
+        <p class="mlk-loader-heading">Analizando tu evaluación médica</p>
+        <p class="mlk-loader-sub">Calculando tu porcentaje de aceptación…</p>
+        <div class="mlk-score-ring" role="img" aria-label="Porcentaje de aceptación">
+          <svg viewBox="0 0 172 172" aria-hidden="true">
+            <circle class="mlk-score-ring__track" cx="86" cy="86" r="70"/>
+            <circle class="mlk-score-ring__fill" id="mlk-ring-fill" cx="86" cy="86" r="70"/>
+          </svg>
+          <div class="mlk-score-num">
+            <span class="mlk-score-num__val" id="mlk-score-counter">0</span>
+            <span class="mlk-score-num__pct">%</span>
+            <span class="mlk-score-num__lbl">aceptación</span>
+          </div>
+        </div>
+        <div class="mlk-analysis-steps" role="list">
+          <div class="mlk-analysis-step" id="mlk-step-1" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Perfil médico evaluado
+          </div>
+          <div class="mlk-analysis-step" id="mlk-step-2" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Criterios de elegibilidad verificados
+          </div>
+          <div class="mlk-analysis-step" id="mlk-step-3" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Porcentaje de aceptación calculado
+          </div>
+        </div>
+      </div>
+
       <div class="mlk-post-card mlk-post-card--apto" id="post-eval-apto" hidden>
         <p class="mlk-post-badge mlk-post-badge--ok" id="post-apto-badge">Evaluación completada</p>
         <p class="mlk-post-score" id="post-apto-score" hidden></p>
@@ -1959,6 +2142,7 @@
 
       function renderResultado(res) {
         var wrap = document.getElementById('intake-resultado');
+        var loader = document.getElementById('mlk-score-loader');
         var aptoPanel = document.getElementById('post-eval-apto');
         var noAptoPanel = document.getElementById('post-eval-no-apto');
         var scoreLine = document.getElementById('post-apto-score');
@@ -1968,9 +2152,13 @@
 
         aptoPanel.hidden = true;
         noAptoPanel.hidden = true;
+        if (loader) loader.hidden = true;
+
+        updateStickyStepper(stepIndex, true);
+        wrap.hidden = false;
+        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
         if (res.aptoProducto) {
-          aptoPanel.hidden = false;
           if (scoreLine) {
             scoreLine.textContent = 'Tu porcentaje de aceptación estimado: ' + res.score + '%';
             scoreLine.hidden = false;
@@ -1987,6 +2175,21 @@
               } catch (e) { /* noop */ }
             };
           }
+          if (loader) {
+            loader.hidden = false;
+            mlkAnimateScore(res.score, function () {
+              loader.hidden = true;
+              aptoPanel.hidden = false;
+              aptoPanel.style.opacity = '0';
+              aptoPanel.style.transform = 'translateY(24px)';
+              void aptoPanel.offsetHeight;
+              aptoPanel.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+              aptoPanel.style.opacity = '1';
+              aptoPanel.style.transform = 'translateY(0)';
+            });
+          } else {
+            aptoPanel.hidden = false;
+          }
         } else {
           noAptoPanel.hidden = false;
           if (scoreLine) scoreLine.hidden = true;
@@ -1994,11 +2197,49 @@
             waBtn.href = 'https://wa.me/' + MLK_WHATSAPP_E164 + '?text=' + encodeURIComponent(MLK_WA_MSG_PROFESIONAL);
           }
         }
+      }
 
-        updateStickyStepper(stepIndex, true);
+      function mlkAnimateScore(target, onDone) {
+        var counterEl = document.getElementById('mlk-score-counter');
+        var ringEl = document.getElementById('mlk-ring-fill');
+        var CIRCUMFERENCE = 440; /* 2 * Math.PI * 70 */
+        var DURATION = 1900;
+        var HOLD = 600;
+        var steps = [
+          document.getElementById('mlk-step-1'),
+          document.getElementById('mlk-step-2'),
+          document.getElementById('mlk-step-3')
+        ];
 
-        wrap.hidden = false;
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        /* Reset state in case called more than once */
+        if (counterEl) counterEl.textContent = '0';
+        if (ringEl) ringEl.style.strokeDashoffset = String(CIRCUMFERENCE);
+        steps.forEach(function (el) { if (el) el.classList.remove('is-done'); });
+
+        /* Reveal checklist steps sequentially */
+        var stepDelays = [250, 750, 1250];
+        steps.forEach(function (el, i) {
+          if (!el) return;
+          setTimeout(function () { el.classList.add('is-done'); }, stepDelays[i]);
+        });
+
+        /* Animate ring + counter with ease-out cubic */
+        var start = null;
+        function tick(ts) {
+          if (!start) start = ts;
+          var elapsed = ts - start;
+          var p = Math.min(elapsed / DURATION, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          var cur = Math.round(eased * target);
+          if (counterEl) counterEl.textContent = cur;
+          if (ringEl) ringEl.style.strokeDashoffset = CIRCUMFERENCE * (1 - (eased * target / 100));
+          if (p < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            setTimeout(onDone, HOLD);
+          }
+        }
+        requestAnimationFrame(tick);
       }
 
       function pad2(n) {
@@ -2346,6 +2587,8 @@
         }
         if (btnPrev) btnPrev.disabled = stepIndex === 0;
         if (btnNext) btnNext.hidden = stepIndex === totalSteps - 1;
+        var welcomeBlock = document.getElementById('intake-welcome-block');
+        if (welcomeBlock) welcomeBlock.hidden = stepIndex > 0;
         if (doScroll !== false && wizard) {
           wizard.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
@@ -2470,6 +2713,8 @@
 
         clearDraft();
         form.hidden = true;
+        var welcomeEl = document.getElementById('intake-welcome-block');
+        if (welcomeEl) welcomeEl.hidden = true;
         renderResultado(elig);
       });
     })();
