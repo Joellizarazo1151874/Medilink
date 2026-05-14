@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <title>Pedido registrado — Medilink Colombia</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:ital,wght@0,400;0,500;0,600;0,700&family=Lora:ital,wght@0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://medvi.org/medvi-icon.png" rel="shortcut icon" type="image/x-icon">
+  <style>
+    :root {
+      --bg-soft: #edf4fb;
+      --bg-surface: #ffffff;
+      --text: #38312c;
+      --muted: #64748b;
+      --border: #e2e8f0;
+      --accent: #6fa6d4;
+      --accent-dark: #4e8ab8;
+      --ok: #15803d;
+      --ok-soft: rgba(22, 163, 74, 0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: max(20px, env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
+      background: linear-gradient(180deg, #e8f2fb 0%, var(--bg-soft) 42%, #f1f5f9 100%);
+      color: var(--text);
+      font-family: "Red Hat Text", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .pc-shell {
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .pc-card {
+      background: var(--bg-surface);
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 36px) clamp(20px, 4vw, 32px);
+      border: 1px solid rgba(111, 166, 212, 0.22);
+      box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      text-align: center;
+    }
+
+    .pc-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      background: var(--ok-soft);
+      border: 2px solid rgba(22, 163, 74, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      line-height: 1;
+    }
+
+    .pc-badge {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      background: rgba(111, 166, 212, 0.16);
+    }
+
+    .pc-card h1 {
+      margin: 0 0 12px;
+      font-family: Lora, Georgia, serif;
+      font-size: clamp(1.35rem, 4.5vw, 1.65rem);
+      font-weight: 600;
+      color: #1e293b;
+      line-height: 1.25;
+    }
+
+    .pc-lead {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 15px;
+      text-align: left;
+    }
+
+    .pc-ref {
+      margin: 0 0 22px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px dashed var(--border);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .pc-ref strong {
+      display: block;
+      margin-top: 6px;
+      font-family: ui-monospace, monospace;
+      font-size: 1.05rem;
+      letter-spacing: 0.04em;
+      color: #0f172a;
+    }
+
+    .pc-details {
+      margin: 0 0 22px;
+      text-align: left;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .pc-details dt {
+      margin: 0;
+      padding: 10px 14px 2px;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #f8fafc;
+    }
+
+    .pc-details dd {
+      margin: 0;
+      padding: 4px 14px 12px;
+      font-weight: 500;
+      color: #334155;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pc-details dd:last-of-type {
+      border-bottom: none;
+    }
+
+    .pc-next {
+      margin: 0 0 22px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(111, 166, 212, 0.1);
+      border: 1px solid rgba(111, 166, 212, 0.28);
+      font-size: 14px;
+      color: #334155;
+      text-align: left;
+    }
+
+    .pc-next strong {
+      color: var(--accent-dark);
+    }
+
+    .pc-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    @media (min-width: 480px) {
+      .pc-actions {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+    }
+
+    .pc-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .pc-btn--primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      box-shadow: 0 8px 22px rgba(78, 138, 184, 0.35);
+    }
+
+    .pc-btn--primary:hover {
+      transform: translateY(-1px);
+    }
+
+    .pc-btn--ghost {
+      color: var(--accent-dark);
+      background: transparent;
+      border: 2px solid rgba(111, 166, 212, 0.45);
+    }
+
+    .pc-foot {
+      margin-top: 22px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .pc-empty {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="pc-shell" id="pc-root">
+    <div class="pc-empty" id="pc-fallback">
+      <p>No encontramos los datos de este pedido en esta sesión.</p>
+      <p><a href="index.html" class="pc-btn pc-btn--ghost" style="margin-top:16px;display:inline-flex;">Volver al inicio</a></p>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var root = document.getElementById('pc-root');
+      var fallback = document.getElementById('pc-fallback');
+      var data = null;
+      try {
+        var raw = sessionStorage.getItem('mlk_pedido_confirmado');
+        if (raw) data = JSON.parse(raw);
+      } catch (e) { /* noop */ }
+
+      if (!data || !data.ref) {
+        return;
+      }
+
+      fallback.remove();
+
+      function esc(s) {
+        if (s == null || s === '') return '—';
+        var d = document.createElement('div');
+        d.textContent = String(s);
+        return d.innerHTML;
+      }
+
+      var rows = [
+        ['Nombre', data.nombre_completo],
+        ['Celular', data.celular],
+        ['Correo', data.email || '—'],
+        ['Envío', [data.departamento, data.ciudad].filter(Boolean).join(' · ')],
+        ['Dirección', data.direccion],
+        ['Barrio', data.barrio],
+        ['Referencias', data.referencias || '—'],
+        ['Producto', data.producto],
+        ['Cantidad', data.cantidad],
+        ['Total', data.valor_total_texto],
+        ['Pago', 'Contra entrega al recibir']
+      ];
+
+      var dts = '';
+      for (var i = 0; i < rows.length; i++) {
+        dts += '<dt>' + esc(rows[i][0]) + '</dt><dd>' + esc(rows[i][1]) + '</dd>';
+      }
+
+      root.innerHTML =
+        '<article class="pc-card">' +
+        '<div class="pc-icon" aria-hidden="true">✓</div>' +
+        '<p class="pc-badge">Pedido registrado</p>' +
+        '<h1>Gracias, hemos recibido tu pedido</h1>' +
+        '<p class="pc-lead">Tu solicitud quedó registrada en nuestro sistema. Un asesor de <strong>Medilink Colombia</strong> se pondrá en contacto contigo por <strong>WhatsApp o llamada</strong> para confirmar datos y coordinar la entrega con <strong>pago contra entrega</strong>.</p>' +
+        '<div class="pc-ref">Número de referencia<strong>' + esc(data.ref) + '</strong>' +
+        '<span style="display:block;margin-top:8px;font-size:12px;color:#64748b;font-weight:400;">Guarda este código por si necesitas dar seguimiento.</span></div>' +
+        '<dl class="pc-details">' + dts + '</dl>' +
+        '<div class="pc-next"><strong>Próximos pasos:</strong> revisa tu celular en las próximas horas. Si no te escribimos en 24 horas hábiles, puedes contactarnos desde la web.</div>' +
+        '<div class="pc-actions">' +
+        '<a class="pc-btn pc-btn--primary" href="index.html">Volver al inicio</a>' +
+        '<a class="pc-btn pc-btn--ghost" href="intakeform6089.html">Ir a la evaluación</a>' +
+        '</div>' +
+        '<p class="pc-foot">Este documento es informativo. La compra definitiva y la entrega quedan sujetas a verificación por parte del equipo y disponibilidad logística.</p>' +
+        '</article>';
+    })();
+  </script>
+</body>
+
+</html>

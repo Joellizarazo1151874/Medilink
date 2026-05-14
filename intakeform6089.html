@@ -1591,6 +1591,25 @@
       stroke-linejoin: round;
     }
 
+    /* ── No-apto loader (care icon) ───────────────────────── */
+    .mlk-care-icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 0 30px;
+      animation: mlk-pulse-care 2.2s ease-in-out infinite;
+    }
+
+    @keyframes mlk-pulse-care {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.06); }
+    }
+
+    .mlk-care-icon svg {
+      width: 120px;
+      height: 120px;
+      display: block;
+    }
+
     [hidden] {
       display: none !important;
   }
@@ -1970,6 +1989,39 @@
         <p class="mlk-post-foot">Este resultado es orientativo y no sustituye la valoración de un profesional de salud.</p>
       </div>
 
+      <!-- Animated loader for no-apto result -->
+      <div id="mlk-score-loader-noapto" class="mlk-post-card mlk-score-loader-card" hidden>
+        <p class="mlk-loader-heading">Revisando tu evaluación</p>
+        <p class="mlk-loader-sub">Procesando tus respuestas…</p>
+        <div class="mlk-care-icon" aria-hidden="true">
+          <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="60" cy="60" r="56" fill="#eef8fb" stroke="#2FA3B4" stroke-width="2" opacity="0.45"/>
+            <circle cx="60" cy="60" r="42" fill="#d5eff4" opacity="0.45"/>
+            <path d="M60,74 C42,62 34,52 34,43 C34,35 40,29 48,29 C53,29 57,32 60,36 C63,32 67,29 72,29 C80,29 86,35 86,43 C86,52 78,62 60,74 Z" fill="#2FA3B4"/>
+          </svg>
+        </div>
+        <div class="mlk-analysis-steps" role="list">
+          <div class="mlk-analysis-step" id="mlk-noapto-step-1" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Perfil médico revisado
+          </div>
+          <div class="mlk-analysis-step" id="mlk-noapto-step-2" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Factores de salud considerados
+          </div>
+          <div class="mlk-analysis-step" id="mlk-noapto-step-3" role="listitem">
+            <span class="mlk-step-icon" aria-hidden="true">
+              <svg viewBox="0 0 12 12"><polyline points="1.5,6.5 4.5,9.5 10.5,2.5"/></svg>
+            </span>
+            Evaluación completada
+          </div>
+        </div>
+      </div>
+
       <div class="mlk-post-card mlk-post-card--no-apto" id="post-eval-no-apto" hidden>
         <p class="mlk-post-badge mlk-post-badge--care">Gracias por tu tiempo</p>
         <h2 class="mlk-post-title">Por el momento, según tus respuestas, este tratamiento podría no ser el más adecuado para ti. Sin embargo, no te desanimes.</h2>
@@ -1991,8 +2043,8 @@
       var errEl = document.getElementById('form-error');
       var btn = document.getElementById('btn-enviar');
 
-      /** Número WhatsApp (solo dígitos, código país sin +). Ejemplo: 573001234567 */
-      var MLK_WHATSAPP_E164 = '573001234567';
+      /** Número WhatsApp (solo dígitos, código país sin +). Ejemplo: 573203289363 */
+      var MLK_WHATSAPP_E164 = '573203289363';
       var MLK_WA_MSG_PROFESIONAL = 'Hola, completé la evaluación y me gustaría agendar una cita con un profesional de la salud.';
 
       function showError(msg) {
@@ -2191,10 +2243,25 @@
             aptoPanel.hidden = false;
           }
         } else {
-          noAptoPanel.hidden = false;
           if (scoreLine) scoreLine.hidden = true;
           if (waBtn) {
             waBtn.href = 'https://wa.me/' + MLK_WHATSAPP_E164 + '?text=' + encodeURIComponent(MLK_WA_MSG_PROFESIONAL);
+          }
+          var loaderNoApto = document.getElementById('mlk-score-loader-noapto');
+          if (loaderNoApto) {
+            loaderNoApto.hidden = false;
+            mlkAnimateNoApto(function () {
+              loaderNoApto.hidden = true;
+              noAptoPanel.hidden = false;
+              noAptoPanel.style.opacity = '0';
+              noAptoPanel.style.transform = 'translateY(24px)';
+              void noAptoPanel.offsetHeight;
+              noAptoPanel.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+              noAptoPanel.style.opacity = '1';
+              noAptoPanel.style.transform = 'translateY(0)';
+            });
+          } else {
+            noAptoPanel.hidden = false;
           }
         }
       }
@@ -2240,6 +2307,21 @@
           }
         }
         requestAnimationFrame(tick);
+      }
+
+      function mlkAnimateNoApto(onDone) {
+        var steps = [
+          document.getElementById('mlk-noapto-step-1'),
+          document.getElementById('mlk-noapto-step-2'),
+          document.getElementById('mlk-noapto-step-3')
+        ];
+        steps.forEach(function (el) { if (el) el.classList.remove('is-done'); });
+        var stepDelays = [350, 950, 1550];
+        steps.forEach(function (el, i) {
+          if (!el) return;
+          setTimeout(function () { el.classList.add('is-done'); }, stepDelays[i]);
+        });
+        setTimeout(onDone, 2300);
       }
 
       function pad2(n) {
