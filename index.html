@@ -303,7 +303,7 @@
     }
 
     .site-footer-link:hover {
-      color: #2563eb;
+      color: #2FA3B4;
     }
 
     .site-footer-bottom {
@@ -461,7 +461,85 @@
       }
     }
 
+    /* Aviso breve: pago contra entrega (no invasivo) */
+    .mlk-toast-cod {
+      position: fixed;
+      left: 16px;
+      bottom: 96px;
+      z-index: 9990;
+      width: calc(100% - 32px);
+      max-width: 300px;
+      margin: 0;
+      padding: 11px 36px 11px 13px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid rgba(47, 163, 180, 0.2);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.08);
+      color: var(--charcoal);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 400;
+      text-align: left;
+      transform: translate3d(0, 12px, 0);
+      opacity: 0;
+      visibility: hidden;
+      transition: transform 0.42s cubic-bezier(0.22, 0.61, 0.36, 1), opacity 0.42s ease, visibility 0s linear 0.45s;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .mlk-toast-cod.is-visible {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      visibility: visible;
+      transition-delay: 0s;
+    }
+
+    .mlk-toast-cod__text {
+      margin: 0;
+    }
+
+    .mlk-toast-cod__text strong {
+      color: var(--evergreen);
+      font-weight: 700;
+    }
+
+    .mlk-toast-cod__close {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: rgba(56, 49, 44, 0.4);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+
+    .mlk-toast-cod__close:hover {
+      color: var(--charcoal);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    @media (min-width: 992px) {
+      .mlk-toast-cod {
+        left: 20px;
+        bottom: 104px;
+        max-width: 288px;
+        font-size: 14px;
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
+      .mlk-toast-cod {
+        transition: none;
+      }
+
       .whatsapp-float {
         transition: none;
       }
@@ -542,6 +620,10 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
     </span>
     <span class="whatsapp-float__cta" aria-hidden="true">¿Tienes dudas? Escríbenos</span>
   </a>
+  <div id="mlk-toast-cod" class="mlk-toast-cod" role="status" aria-live="polite" hidden>
+    <button type="button" class="mlk-toast-cod__close" aria-label="Cerrar aviso">&times;</button>
+    <p class="mlk-toast-cod__text"><strong>Pago contra entrega</strong> en todo Colombia: pagas al recibir tu pedido, sin adelantos en línea.</p>
+  </div>
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function () {
       var link = document.getElementById('whatsapp-float');
@@ -574,6 +656,49 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
         }
       });
     });
+  </script>
+  <script type="text/javascript">
+    (function () {
+      function initMlkCodToast() {
+        var el = document.getElementById('mlk-toast-cod');
+        if (!el) return;
+
+        var closeBtn = el.querySelector('.mlk-toast-cod__close');
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var showDelayMs = 350;
+        var visibleMs = 10000;
+        var hideTimer;
+
+        function hide() {
+          clearTimeout(hideTimer);
+          el.classList.remove('is-visible');
+          setTimeout(function () {
+            el.hidden = true;
+          }, reduced ? 0 : 400);
+        }
+
+        function show() {
+          el.hidden = false;
+          requestAnimationFrame(function () {
+            el.classList.add('is-visible');
+          });
+          hideTimer = setTimeout(hide, visibleMs);
+        }
+
+        setTimeout(show, showDelayMs);
+        if (closeBtn) {
+          closeBtn.addEventListener('click', function () {
+            hide();
+          });
+        }
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initMlkCodToast);
+      } else {
+        initMlkCodToast();
+      }
+    })();
   </script>
   <div
     style="-webkit-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, -84px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)"
@@ -631,6 +756,10 @@ f=false,w=window,d=document,v=d.querySelector('#vwoCode'),cK='_vwo_'+account_id+
                 alt="Empieza hoy" src="images/checkmark-icon-white.svg" class="image checkmark">
               <div class="list-item-text"><span class="semi-bold">Empieza hoy mismo</span>, 
                 envío gratis</div>
+            </div>
+            <div id="w-node-mlk-pago-contraentrega-bfc40424" class="list-item-container"><img
+                alt="Pago contra entrega en Colombia" src="images/checkmark-icon-white.svg" class="image checkmark">
+              <div class="list-item-text"><span class="semi-bold">Pago contra entrega</span> en todo Colombia: pagas al recibir tu pedido, sin adelantos en línea</div>
             </div>
             <div id="w-node-ba0cb621-9a7e-b50c-5ff2-cb11cc2fb6ab-bfc40424" class="list-item-container"><img
                 alt="Aprobado para HSA y FSA" src="images/checkmark-icon-white.svg" class="image checkmark">
